@@ -7,10 +7,10 @@ const { register } = require("../controllers/UserController");
 
 //middlewares
 const validate = require("../middlewares/handleValidation");
-
+const { userCreateValidation } = require("../middlewares/userValidations");
 
 //rotas
-router.post("/register", validate, register);
+router.post("/register", userCreateValidation(), validate, register);
 
 
 
