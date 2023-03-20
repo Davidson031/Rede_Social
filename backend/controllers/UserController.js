@@ -13,6 +13,14 @@ const generateToken = (id) => {
     });
 }
 
+getCurrentUser = async (req, res) => {
+
+    const user = req.user;
+
+    res.status(200).json({ user });
+    
+}
+
 
 //register user (and sign-in afterwards)
 const register = async (req, res) => {
@@ -82,5 +90,6 @@ const login = async (req, res) => {
 module.exports = { 
     generateToken,
     register,
-    login
+    login,
+    getCurrentUser
 }
