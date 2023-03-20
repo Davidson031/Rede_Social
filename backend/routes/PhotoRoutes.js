@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 //funcoes do controller
-const { insertPhoto } = require("../controllers/PhotoController");
+const { insertPhoto, deletePhoto, getAllPhotos, getUserPhotos } = require("../controllers/PhotoController");
 
 //middlewares
 const { photoInsertValidation } = require("../middlewares/photoValidation");
@@ -12,10 +12,8 @@ const { imageUpload } = require("../middlewares/imageUpload");
 
 //rotas
 router.post("/", authGuard, imageUpload.single("image"), photoInsertValidation(), validate, insertPhoto)
-// router.post("/", () => { 
-//     console.log("dsadasdadasdsad")
-// })
-
-
+router.delete("/:id", authGuard, deletePhoto);
+router.get("/", getAllPhotos)
+router.get("/user/:id", authGuard, getUserPhotos)
 
 module.exports = router;
