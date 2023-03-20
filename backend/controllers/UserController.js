@@ -2,12 +2,13 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const jwtSecret = process.env.JWT_SECRET;
+const mongoose = require("mongoose");
 require("../config/db.js");
 
 
 
 //gerar token
-const generateToken = (id) => { 
+const generateToken = (id) => {
     return jwt.sign({ id }, jwtSecret, {
         expiresIn: "7d"
     });
@@ -18,7 +19,7 @@ getCurrentUser = async (req, res) => {
     const user = req.user;
 
     res.status(200).json({ user });
-    
+
 }
 
 
@@ -29,12 +30,12 @@ const register = async (req, res) => {
     const { name, email, password } = req.body;
 
     //see if user exists
-    const user = await User.findOne( { email });
+    const user = await User.findOne({ email });
 
-    if(user){
+    if (user) {
         res.status(422).json({ errors: "Por favor, utilize outro e-mail" });
         return;
-    } 
+    }
 
     //generate password hash
     const salt = await bcrypt.genSalt();
@@ -50,8 +51,8 @@ const register = async (req, res) => {
 
 
     //check if user was created and return token if so
-    if(!newUser){
-        res.status(422).json({ errors: ["Houve um erro, favor tente mais tarde "]});
+    if (!newUser) {
+        res.status(422).json({ errors: ["Houve um erro, favor tente mais tarde "] });
         return;
     };
 
@@ -61,19 +62,19 @@ const register = async (req, res) => {
     })
 }
 
-const login = async (req, res) => { 
+const login = async (req, res) => {
 
     const { email, password } = req.body;
 
-    const user = await User.findOne({email});
+    const user = await User.findOne({ email });
 
-    if(!user){
-        res.status(404).json({ errors: ["User não encontrado!"]});
+    if (!user) {
+        res.status(404).json({ errors: ["User não encontrado!"] });
         return;
     }
 
-    if(!(await bcrypt.compare(password, user.password))){
-        res.status(422).json({errors: ["Senha inválida!"]});
+    if (!(await bcrypt.compare(password, user.password))) {
+        res.status(422).json({ errors: ["Senha inválida!"] });
         return;
     }
 
@@ -86,10 +87,51 @@ const login = async (req, res) => {
 
 }
 
+const update = async (req, res) => {
 
-module.exports = { 
+    const { name, password, bio } = req.body;
+
+    let profileImage = null;
+
+    if (req.file) {
+        profileImage = req.file.filename;
+    }
+
+    const reqUser = req.user;
+
+    const user = await User.findById(reqUser._id).select("-password");
+
+    if (name) {
+        user.name = name;
+    }
+
+    if (password) {
+        const salt = await bcrypt.genSalt();
+        const passwordHash = await bcrypt.hash(password, salt);
+
+        user.password = passwordHash;
+    }
+
+    if(profileImage){
+        user.profileImage = profileImage;
+    }
+
+    if(bio){
+        user.bio = bio;
+    }
+
+    await user.save()
+
+
+
+    res.status(200).json({ user })
+}
+
+
+module.exports = {
     generateToken,
     register,
     login,
-    getCurrentUser
+    getCurrentUser,
+    update
 }
