@@ -75,17 +75,17 @@ const getAllPhotos = async (req, res) => {
 
 }
 
-const getUserPhotos = async (req, res) => { 
+const getUserPhotos = async (req, res) => {
 
     const { id } = req.params;
 
-    const photos = await Photo.find({userId: id}).sort([['createdAt', -1]]).exec();
+    const photos = await Photo.find({ userId: id }).sort([['createdAt', -1]]).exec();
 
     return res.status(200).json({ photos });
 
 }
 
-const getPhotoById = async (req, res) => { 
+const getPhotoById = async (req, res) => {
 
     const { id } = req.params;
 
@@ -95,13 +95,13 @@ const getPhotoById = async (req, res) => {
 
         return;
     } catch (error) {
-        res.status(404).json({errors: ["Foto não encontrada"]});
+        res.status(404).json({ errors: ["Foto não encontrada"] });
         return;
     }
 
 }
 
-const updatePhoto = async (req, res) => { 
+const updatePhoto = async (req, res) => {
 
     const { id } = req.params;
     const { title } = req.body;
@@ -111,17 +111,17 @@ const updatePhoto = async (req, res) => {
     try {
         const photo = await Photo.findById(id);
 
-        if(!photo){
-            res.status(404).json({ errors: ["Foto não encontrada"]});
+        if (!photo) {
+            res.status(404).json({ errors: ["Foto não encontrada"] });
             return;
         }
 
-        if(!photo.userId.equals(reqUser._id)){
-            req.status(422).json({errors: ["Ocorreu um erro"]});
+        if (!photo.userId.equals(reqUser._id)) {
+            req.status(422).json({ errors: ["Ocorreu um erro"] });
             return;
         }
 
-        if(title){
+        if (title) {
             photo.title = title;
         }
 
@@ -136,7 +136,7 @@ const updatePhoto = async (req, res) => {
 
 }
 
-const likePhoto = async (req, res) => { 
+const likePhoto = async (req, res) => {
 
     const { id } = req.params;
 
@@ -145,13 +145,13 @@ const likePhoto = async (req, res) => {
     try {
         const photo = await Photo.findById(id);
 
-        if(!photo){
-            res.status(404).json({errors: ["Foto não encontrada!"]});
+        if (!photo) {
+            res.status(404).json({ errors: ["Foto não encontrada!"] });
             return;
         }
 
-        if(photo.likes.includes(reqUser._id)){
-            res.status(422).json({errors: ["Você já curtiu essa foto!"]});
+        if (photo.likes.includes(reqUser._id)) {
+            res.status(422).json({ errors: ["Você já curtiu essa foto!"] });
             return;
         }
 
@@ -159,12 +159,57 @@ const likePhoto = async (req, res) => {
 
         photo.save();
 
-        res.status(200).json({ photoId:  id, userId: reqUser._id, message: "A foto foi curtida!"});
+        res.status(200).json({ photoId: id, userId: reqUser._id, message: "A foto foi curtida!" });
 
     } catch (error) {
         console.log(error);
     }
 }
 
-module.exports = { insertPhoto, deletePhoto, getAllPhotos, getUserPhotos, getPhotoById, updatePhoto, likePhoto }
+const commentPhoto = async (req, res) => {
+
+    const { id } = req.params;
+    const { comment } = req.body;
+
+    const reqUser = req.user;
+
+    try {
+        //tentando buscar foto e user no bd 
+        const user = await User.findById(reqUser._id);
+        const photo = await Photo.findById(id);
+
+        if(!photo){
+            res.status(404).json({ errors: ["Foto não encontrada!"]});
+        }
+
+        const userComment = { 
+            comment,
+            userName: user.name,
+            userImage: user.profileImage,
+            userId: user._id
+        };
+
+        photo.comments.push(userComment);
+
+        await photo.save();
+
+        res.status(200).json({ comment: userComment, message: "O comentário foi adicionado"});
+
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
+const searchPhotos = async (req, res) => { 
+
+    const { q } = req.query;
+
+    const photos = await Photo.find({ title: new RegExp(q, "i")}).exec();
+
+    res.status(200).json({ photos });
+
+    return;
+}
+module.exports = { insertPhoto, deletePhoto, getAllPhotos, getUserPhotos, getPhotoById, updatePhoto, likePhoto, commentPhoto, searchPhotos }
 
