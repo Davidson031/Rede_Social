@@ -57,7 +57,7 @@ const Register = () => {
         { loading && <input type="submit" value="Aguarde..." disabled/>}
         { error && <Message msg={ error } type="error" />}
       </form>
-      <p>Já tem conta? <Link to="/">Clique aqui</Link></p>
+      <p>Já tem conta? <Link to="/login">Clique aqui</Link></p>
     </div>
   )
 }

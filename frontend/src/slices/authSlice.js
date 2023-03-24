@@ -28,6 +28,10 @@ export const logout = createAsyncThunk("auth/logout", async () => {
     await authService.logout();
 })
 
+export const teste = createAsyncThunk("auth/teste", async() => {
+    console.log("action...");
+})
+
 export const authSlice = createSlice({
     name : "auth",
     initialState,
@@ -56,10 +60,18 @@ export const authSlice = createSlice({
             state.success = true;
             state.error = null;
             state.user = null;
+        }).addCase(teste.fulfilled, (state) => {
+            state.loading = "estado_fullfilled";
+            state.error = "estado_fullfilled";
+            state.success = "estado_fullfilled";
+        })
+        .addCase(teste.pending, (state) => {
+            state.loading = "estado_pending";
+            state.error = "estado_pending";
+            state.success = "estado_pending";
         })
     }
 })
-
 
 export const { reset } = authSlice.actions;
 
