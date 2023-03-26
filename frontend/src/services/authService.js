@@ -12,7 +12,7 @@ const register = async (data) => {
             .then((res) => res.json())
             .catch((err) => err)
 
-        if(res){
+        if (res) {
             localStorage.setItem("user", JSON.stringify(res));
         }
 
@@ -24,13 +24,32 @@ const register = async (data) => {
 }
 
 //login
+const login = async (data) => {
 
+    const config = requestConfig("POST", data);
+
+    try {
+
+        const res = await fetch(api + "/users/login", config)
+            .then((res) => res.json())
+            .catch((err) => err);
+
+        if (res) {
+            localStorage.setItem("user", JSON.stringify(res));
+        }
+
+        return res;
+
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 //logout
-const logout = () => { 
+const logout = () => {
     localStorage.removeItem("user");
 }
 
-const authService = { register, logout };
+const authService = { register, logout, login };
 
 export default authService;

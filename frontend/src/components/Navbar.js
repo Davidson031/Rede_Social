@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 
 //redux
-import { logout, reset, teste } from "../slices/authSlice";
+import { logout, reset } from "../slices/authSlice";
 
 const Navbar = () => {
 
@@ -32,9 +32,6 @@ const Navbar = () => {
     navigate("/");
   }
 
-  const handleTeste = () => { 
-    dispatch(teste());
-  }
 
   return (
     <nav id='nav'>
@@ -68,7 +65,7 @@ const Navbar = () => {
               </NavLink>
             </li>
             <li>
-              <span onClick={ handleTeste }>Sair</span>
+              <span onClick={ handleLogout }>Sair</span>
             </li>
           </>
         ) : (
