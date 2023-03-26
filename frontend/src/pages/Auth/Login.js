@@ -35,7 +35,7 @@ const Login = () => {
   // cleaning
   useEffect(() => {
     dispatch(reset());
-  }, dispatch)
+  }, [dispatch])
 
   return (
     <div className="login">
