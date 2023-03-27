@@ -14,6 +14,7 @@ import Footer from "./components/Footer";
 
 //hooks
 import { useAuth } from "./hooks/useAuth";
+import Profile from './pages/Profile/Profile';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
             <Route path='/profile' element={ auth ? <EditProfile /> : <Navigate to= "/" />} />
             <Route path='/login' element={ !auth ? <Login /> : <Navigate to= "/" />} />
             <Route path='/register' element={ !auth ? <Register /> : <Navigate to= "/" />} />
+            <Route path='/users/:id' element={ auth ? <Profile/> : <Navigate to= "/" />} />
           </Routes>
         </div>
         <Footer />
