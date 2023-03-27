@@ -18,7 +18,7 @@ getCurrentUser = async (req, res) => {
 
     const user = req.user;
 
-    res.status(200).json({ user });
+    res.status(200).json(user);
 
 }
 
@@ -139,7 +139,7 @@ const getUserById = async (req, res) => {
             return;
         }
 
-        res.status(200).json({ user })
+        res.status(200).json(user)
     } catch (error) {
         res.status(404).json({ errors: ["Usuário não encontrado!"] });
     }

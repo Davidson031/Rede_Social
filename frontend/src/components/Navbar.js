@@ -32,7 +32,6 @@ const Navbar = () => {
     navigate("/");
   }
 
-
   return (
     <nav id='nav'>
       <Link to="/">
