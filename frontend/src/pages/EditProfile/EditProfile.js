@@ -18,6 +18,14 @@ const Profile = () => {
         e.preventDefault();
     }
 
+    const handleFile = (e) => {
+
+        const image = e.target.files[0];
+
+        setPreviewImage(image);
+        setProfileImage(image);
+    }
+
     const dispatch = useDispatch();
 
     const { user, message, error, loading } = useSelector((state) => state.user);
@@ -48,12 +56,17 @@ const Profile = () => {
         <div id="edit-profile">
             <h2>Edite seus dados!</h2>
             <p className="subtitle">Adicione uma imagem de perfil e conte mais sobre você!</p>
+            {(user.profileImage || previewImage) && (
+                <img className="profile-image"
+                src={ previewImage ? URL.createObjectURL(previewImage) : `${uploads}/users/${user.profileImage}`} alt= { user.name } 
+                />
+            )}
             <form onSubmit={handleSubmit}>
                 <input type="text" name="" id="" placeholder="Nome" onChange={(e) => setName(e.target.value)} value={name || ""} />
                 <input type="email" name="" id="" placeholder="E-mail" disabled value={email || ""} />
                 <label>
                     <span>Imagem de Perfil: </span>
-                    <input type="file" name="" id="" />
+                    <input type="file" name="" id="" onChange={ handleFile }/>
                 </label>
                 <label>
                     <span>Bio:</span>
