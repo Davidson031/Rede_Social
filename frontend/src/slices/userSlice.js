@@ -31,13 +31,24 @@ export const updateProfile = createAsyncThunk(
 
         const data = await userService.updateProfile(user, token);
 
-        if(data.errors){
+        if (data.errors) {
             return thunkAPI.rejectWithValue(data.errors[0]);
         }
 
         return data;
     }
 )
+
+export const getUserDetails = createAsyncThunk(
+    "user/get",
+    async (id, thunkAPI) => {
+
+        const data = await userService.getUserDetails(id);
+
+        return data;
+    }
+)
+
 
 //reducer
 export const userSlice = createSlice({
@@ -70,6 +81,14 @@ export const userSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
             state.user = {};
+        }).addCase(getUserDetails.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        }).addCase(getUserDetails.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = null;
+            state.user = action.payload;
         })
     }
 });
