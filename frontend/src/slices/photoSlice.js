@@ -68,6 +68,7 @@ export const photoSlice = createSlice({
         }).addCase(getUserPhotos.pending, (state) => {
             state.loading = true;
             state.error = null;
+            state.photos = [];
         }).addCase(getUserPhotos.fulfilled, (state, action) => {
             state.loading = false;
             state.success = true;

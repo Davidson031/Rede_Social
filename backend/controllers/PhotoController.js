@@ -65,7 +65,7 @@ const getAllPhotos = async (req, res) => {
     try {
         const photos = await Photo.find({}).exec();
 
-        res.status(200).json({ photos })
+        res.status(200).json(photos)
         return;
     } catch (error) {
         res.statius(404).json({ message: "Não foi possível carregar as fotos!" })
@@ -81,7 +81,7 @@ const getUserPhotos = async (req, res) => {
 
     const photos = await Photo.find({ userId: id }).sort([['createdAt', -1]]).exec();
 
-    return res.status(200).json({ photos });
+    return res.status(200).json(photos);
 
 }
 
