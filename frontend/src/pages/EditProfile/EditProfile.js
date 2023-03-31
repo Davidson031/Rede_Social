@@ -15,8 +15,6 @@ import Message from "../../components/Message";
 
 const Profile = () => {
 
-
-
     const handleFile = (e) => {
 
         const image = e.target.files[0];

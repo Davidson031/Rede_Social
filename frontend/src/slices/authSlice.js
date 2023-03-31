@@ -9,6 +9,7 @@ const initialState = {
     error: false,
     success: false,
     loading: false,
+    teste: "bleble"
 }
 
 
@@ -39,6 +40,7 @@ export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
 export const logout = createAsyncThunk("auth/logout", async () => {
     await authService.logout();
 })
+
 
 export const authSlice = createSlice({
     name : "auth",
