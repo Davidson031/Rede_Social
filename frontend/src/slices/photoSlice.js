@@ -62,7 +62,7 @@ export const updatePhoto = createAsyncThunk(
 
         const token = thunkAPI.getState().auth.user.token;
 
-        const data = await photoService.updatePhoto({ title: photoData.title }, photoData._id, token);
+        const data = await photoService.updatePhoto({ title: photoData.title }, photoData.id, token);
 
         if (data.errors) {
             return thunkAPI.rejectWithValue(data.errors[0]);
