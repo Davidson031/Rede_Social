@@ -91,7 +91,7 @@ const getPhotoById = async (req, res) => {
 
     try {
         const photo = await Photo.findById(id);
-        res.status(200).json({ photo });
+        res.status(200).json(photo);
 
         return;
     } catch (error) {
@@ -207,7 +207,7 @@ const searchPhotos = async (req, res) => {
 
     const photos = await Photo.find({ title: new RegExp(q, "i")}).exec();
 
-    res.status(200).json({ photos });
+    res.status(200).json(photos);
 
     return;
 }

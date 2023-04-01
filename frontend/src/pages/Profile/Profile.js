@@ -131,7 +131,13 @@ const Profile = () => {
             <div className="photo" key={photo._id}>
               {photo.image && (<img src={`${uploads}/photos/${photo.image}`} alt={photo.title} />)}
               {id === userAuth.id ? (
-                <p>Actions</p>
+                <div className="actions">
+                  <Link to={`/photos/${photo._id}`}>
+                    <BsFillEyeFill />
+                  </Link>
+                  <BsPencilFill />
+                  <BsXLg />
+                </div>
               ) : (<Link to={`/photos/${photo._id}`} className="btn">Ver</Link>)}
             </div>
           ))}
