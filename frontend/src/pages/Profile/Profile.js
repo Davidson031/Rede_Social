@@ -129,7 +129,7 @@ const Profile = () => {
         <h2>Fotos Publicadas</h2>
         <div className="photos-container">
           {photos && photos.map((photo) => (
-            <div className="photo" key={photo._id}>
+            <div className="photo" key={photo.id}>
               {photo.image && (<img src={`${uploads}/photos/${photo.image}`} alt={photo.title} />)}
               {id === userAuth.id ? (
                 <div className="actions">
