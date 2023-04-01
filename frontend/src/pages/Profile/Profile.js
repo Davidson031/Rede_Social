@@ -15,7 +15,7 @@ import { useParams } from "react-router-dom";
 
 //redux
 import { getUserDetails } from "../../slices/userSlice";
-import { publishPhoto, resetMessage, getUserPhotos } from "../../slices/photoSlice";
+import { publishPhoto, resetMessage, getUserPhotos, deletePhoto } from "../../slices/photoSlice";
 
 const Profile = () => {
 
@@ -40,6 +40,13 @@ const Profile = () => {
     setImage(image);
   }
 
+  const resetComponentMessage = () => {
+    setTimeout(() => {
+
+      dispatch(resetMessage());
+
+    }, 2000);
+  }
 
   //refs
   const newPhotoForm = useRef();
@@ -50,8 +57,6 @@ const Profile = () => {
 
     dispatch(getUserDetails(id));
     dispatch(getUserPhotos(id));
-
-    //console.log(Array.from(photos));
 
   }, [dispatch, id]);
 
@@ -67,14 +72,6 @@ const Profile = () => {
       image
     }
 
-    // const formData = new FormData();
-
-    // const photoFormData = Object.keys(photoData).forEach((key) => formData.append(key, photoData[key]));
-
-    // formData.append("photo", photoFormData);
-
-    // dispatch(publishPhoto(formData));
-
     const formData = new FormData();
 
     Object.keys(photoData).forEach((key) => formData.append(key, photoData[key]))
@@ -82,11 +79,15 @@ const Profile = () => {
 
     setTitle("");
 
-    setTimeout(() => {
+    resetComponentMessage();
 
-      dispatch(resetMessage());
+  }
 
-    }, 2000);
+  const handleDelete = async (id) => {
+
+    dispatch(deletePhoto(id));
+
+    resetComponentMessage();
 
   }
 
@@ -136,7 +137,7 @@ const Profile = () => {
                     <BsFillEyeFill />
                   </Link>
                   <BsPencilFill />
-                  <BsXLg />
+                  <BsXLg onClick={() => handleDelete(photo._id)} />
                 </div>
               ) : (<Link to={`/photos/${photo._id}`} className="btn">Ver</Link>)}
             </div>
