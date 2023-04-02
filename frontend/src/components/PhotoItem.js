@@ -1,4 +1,4 @@
-import React from 'react'
+import "./PhotoItem.css";
 
 import { uploads } from '../utils/config';
 
