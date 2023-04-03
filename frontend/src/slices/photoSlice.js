@@ -85,6 +85,21 @@ export const getPhoto = createAsyncThunk(
     }
 )
 
+export const like = createAsyncThunk(
+    "photo/like",
+    async (id, thunkAPI) => {
+
+        const token = thunkAPI.getState().auth.user.token;
+
+        const data = await photoService.like(id, token);
+
+        if (data.errors) {
+            return thunkAPI.rejectWithValue(data.errors[0]);
+        }
+
+        return data;
+    }
+);
 
 export const photoSlice = createSlice({
     name: "photo",
@@ -163,6 +178,24 @@ export const photoSlice = createSlice({
             state.success = true;
             state.error = null;
             state.photo = action.payload;
+        }).addCase(like.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        }).addCase(like.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = true;
+            state.error = null;
+            if (state.photo.likes) {
+                state.photo.likes.push(action.payload.userId);
+            }
+            state.photos.map((photo) => {
+                //atualizando dados dentro do frontend
+                if (photo.id === action.payload.photo.photoId) {
+                    return photo.likes.push(action.payload.userId);
+                }
+                return photo;
+            })
+            state.message = action.payload.message
         })
     }
 });
