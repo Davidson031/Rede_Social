@@ -26,7 +26,7 @@ const Home = () => {
     dispatch(getPhotos());
   }, [dispatch]);
 
-  const handleLike = (photo = null) => {
+  const handleLike = (photo) => {
     dispatch(like(photo._id));
 
     resetMessage();
